@@ -191,7 +191,13 @@ void DynamicLight2::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &trans
 		createFinalShadowMap();
 	}
 	finalShadowMapSprite->visit(renderer, transform, flags);//why not just visit();
+	//maybe this?
+	//finalShadowMap->beginWithClear(color.r, color.g, color.b, color.a);
+	//	shadowMap1DSprite->visit();
+	//finalShadowMap->end();
+	//finalShadowMap->visit();
 
+	//for debug
 	//occlusionMap->setAnchorPoint({ 0.5, 0.5 });
 	//occlusionMap->setPosition({ 300, 0 });
 	//occlusionMap->visit(renderer, transform, flags);
