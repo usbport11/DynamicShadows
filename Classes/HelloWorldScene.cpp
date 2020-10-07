@@ -19,13 +19,13 @@ bool HelloWorld::init() {
 		return false;
 	}
 
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
 	auto shadowCaster = Sprite::create("cat4.png");
 	shadowCaster->retain();
 	shadowCaster->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	this->addChild(shadowCaster, 10);
+	auto back = Sprite::create("cat4back.png");
+	back->retain();
+	back->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	this->addChild(back, 8);
 
 	dynLight = DynamicLight2::create();
 	dynLight->retain();
