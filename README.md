@@ -1,5 +1,5 @@
 # DynamicShadows
-Cocos2d-x 4.0 Dynamic shadow
+Cocos2d-x 4.0 Dynamic shadows
 
 Based on this articles:<br>
 https://github.com/mattdesl/lwjgl-basics/wiki/2D-Pixel-Perfect-Shadows<br>
