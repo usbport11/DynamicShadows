@@ -46,6 +46,8 @@ void DynamicLight2::initOcclusionMap() {
 	occlusionMap = RenderTexture::create(lightSize, lightSize);
 	occlusionMap->retain();
 	occlusionMapSprite = Sprite::createWithTexture(occlusionMap->getSprite()->getTexture());
+	occlusionMapSprite->setFlippedY(true);
+	occlusionMapSprite->setProgramState(shadowMapShaderState);//link program to sprite
 	occlusionMap->retain();
 }
 
@@ -56,6 +58,12 @@ void DynamicLight2::initShadowMap1D() {
 	shadowMap1D = RenderTexture::create(lightSize, 16);//2
 	shadowMap1D->retain();
 	shadowMap1DSprite = Sprite::createWithTexture(shadowMap1D->getSprite()->getTexture());
+	Texture2D::TexParams params;
+	params.magFilter = cocos2d::backend::SamplerFilter::LINEAR;
+	params.minFilter = cocos2d::backend::SamplerFilter::LINEAR;
+	params.sAddressMode = cocos2d::backend::SamplerAddressMode::REPEAT;
+	params.tAddressMode = cocos2d::backend::SamplerAddressMode::REPEAT;
+	shadowMap1DSprite->getTexture()->setTexParameters(params);
 	shadowMap1DSprite->retain();
 }
 
@@ -68,6 +76,7 @@ void DynamicLight2::initFinalShadowMap() {
 	finalShadowMap = RenderTexture::create(finalSize, finalSize);
 	finalShadowMap->retain();
 	finalShadowMapSprite = Sprite::createWithTexture(finalShadowMap->getSprite()->getTexture());
+	finalShadowMapSprite->setProgramState(shadowRenderShaderState);//link program to sprite
 	finalShadowMapSprite->retain();
 }
 
@@ -111,8 +120,6 @@ void DynamicLight2::create1DShadowMap() {
 	//for debug draw only
 	occlusionMapSprite->setAnchorPoint({0, 0});
 	//create 1d bw shadow map
-	cocos2d::backend::UniformLocation u_texture = shadowMapShaderState->getUniformLocation("u_texture");
-	shadowMapShaderState->setTexture(u_texture, 1, occlusionMapSprite->getTexture()->getBackendTexture());
 	occlusionMapSprite->setProgramState(shadowMapShaderState);
 	shadowMap1D->beginWithClear(0.0f, 0.0f, 0.0f, 0.0f);
 		occlusionMapSprite->visit();
@@ -120,18 +127,20 @@ void DynamicLight2::create1DShadowMap() {
 }
 
 void DynamicLight2::createFinalShadowMap() {
+	//for debug draw only
+	shadowMap1DSprite->setAnchorPoint({ 0, 0 });
+	//create
 	cocos2d::backend::UniformLocation u_texture2 = shadowRenderShaderState->getUniformLocation("u_texture2");
 	shadowRenderShaderState->setTexture(u_texture2, 1, shadowMap1DSprite->getTexture()->getBackendTexture());
-	finalShadowMapSprite->setColor({ color.r, color.g, color.b });
-	finalShadowMapSprite->setOpacity(color.a);
-	finalShadowMapSprite->setProgramState(shadowRenderShaderState);
-	finalShadowMapSprite->setAnchorPoint({ 0.5, 0.5 });
-	//finalShadowMapSprite->setPosition(getPositionX() + lightSize / 2, getPositionY() + lightSize / 2);
-	finalShadowMapSprite->setPosition((-getPositionX() + lightSize / 2) / 2, (-getPositionY() + lightSize / 2) / 2);
+	finalShadowMapSprite->setColor({ 255, 255, 255 });
+	finalShadowMapSprite->setAnchorPoint({ 0, 0 });
 	if (additive)
 		finalShadowMapSprite->setBlendFunc(BlendFunc::ADDITIVE);
 	else
 		finalShadowMapSprite->setBlendFunc({ backend::BlendFactor::SRC_COLOR, backend::BlendFactor::ONE });
+	finalShadowMap->begin();
+		finalShadowMapSprite->visit();
+	finalShadowMap->end();
 }
 
 bool DynamicLight2::init() {
@@ -190,12 +199,7 @@ void DynamicLight2::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &trans
 		create1DShadowMap();
 		createFinalShadowMap();
 	}
-	finalShadowMapSprite->visit(renderer, transform, flags);//why not just visit();
-	//maybe this?
-	//finalShadowMap->beginWithClear(color.r, color.g, color.b, color.a);
-	//	shadowMap1DSprite->visit();
-	//finalShadowMap->end();
-	//finalShadowMap->visit();
+	finalShadowMap->visit(renderer, transform, flags);
 
 	//for debug
 	//occlusionMap->setAnchorPoint({ 0.5, 0.5 });
@@ -211,7 +215,7 @@ void DynamicLight2::setPosition(const cocos2d::Point& position) {
 	if (position.x == getPosition().x && position.y == getPosition().y) {
 		return;
 	}
-	Node::setPosition(position);//important!
+	Node::setPosition(position);
 }
 
 void DynamicLight2::setSoftShadows(bool shadows) {
