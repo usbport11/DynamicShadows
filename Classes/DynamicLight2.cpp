@@ -25,6 +25,9 @@ DynamicLight2::DynamicLight2() {
 	shadowRenderShaderState = nullptr;
 	shadowMapShader = nullptr;
 	shadowRenderShader = nullptr;
+	
+	darkAreaMap = nullptr;
+	darkAreaMapSprite = nullptr;
 }
 
 DynamicLight2::~DynamicLight2() {
@@ -37,6 +40,8 @@ DynamicLight2::~DynamicLight2() {
 	CC_SAFE_RELEASE(finalShadowMap);
 	CC_SAFE_RELEASE(finalShadowMapSprite);
 	CC_SAFE_RELEASE(shadowCaster);
+	CC_SAFE_RELEASE(darkAreaMap);
+	CC_SAFE_RELEASE(darkAreaMapSprite);
 }
 
 void DynamicLight2::initOcclusionMap() {
@@ -78,6 +83,22 @@ void DynamicLight2::initFinalShadowMap() {
 	finalShadowMapSprite = Sprite::createWithTexture(finalShadowMap->getSprite()->getTexture());
 	finalShadowMapSprite->setProgramState(shadowRenderShaderState);//link program to sprite
 	finalShadowMapSprite->retain();
+}
+
+void DynamicLight2::initDarkAreaMap() {
+	CC_SAFE_RELEASE(darkAreaMap);
+	CC_SAFE_RELEASE(darkAreaMapSprite);
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	darkAreaMap = RenderTexture::create(visibleSize.width, visibleSize.height);
+	darkAreaMap->retain();
+	darkAreaMapSprite = Sprite::createWithTexture(darkAreaMap->getSprite()->getTexture());
+	darkAreaMapSprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	darkAreaMapSprite->setBlendFunc({ backend::BlendFactor::SRC_COLOR , backend::BlendFactor::SRC_ALPHA });
+	darkAreaMapSprite->setFlippedY(true);//important!
+	darkAreaMapSprite->retain();
 }
 
 void DynamicLight2::updateUniforms() {
@@ -127,10 +148,16 @@ void DynamicLight2::create1DShadowMap() {
 }
 
 void DynamicLight2::createFinalShadowMap() {
-	//create final shadow map
+	//difficult to say that this function create final shadow map
 	cocos2d::backend::UniformLocation u_texture2 = shadowRenderShaderState->getUniformLocation("u_texture2");
 	shadowRenderShaderState->setTexture(u_texture2, 1, shadowMap1DSprite->getTexture()->getBackendTexture());
-	finalShadowMapSprite->setBlendFunc({ backend::BlendFactor::SRC_COLOR , backend::BlendFactor::SRC_ALPHA});//switch black and white
+}
+
+void DynamicLight2::createDarkAreaMap() {
+	finalShadowMapSprite->setPosition(getPositionX(), getPositionY());
+	darkAreaMap->beginWithClear(0.0f, 0.0f, 0.0f, 0.0f);
+		finalShadowMapSprite->visit();
+	darkAreaMap->end();
 }
 
 bool DynamicLight2::init() {
@@ -159,6 +186,7 @@ bool DynamicLight2::init() {
 	initOcclusionMap();
 	initShadowMap1D();
 	initFinalShadowMap();
+	initDarkAreaMap();
 	bakedMapIsValid = false;
 	
 	return true;
@@ -188,17 +216,8 @@ void DynamicLight2::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &trans
 		createOcclusionMap();
 		create1DShadowMap();
 		createFinalShadowMap();
+		createDarkAreaMap();
 	}
-	finalShadowMap->visit(renderer, transform, flags);
-
-	//for debug
-	//occlusionMap->setAnchorPoint({ 0.5, 0.5 });
-	//occlusionMap->setPosition({ 300, 0 });
-	//occlusionMap->visit(renderer, transform, flags);
-
-	//shadowMap1D->setAnchorPoint({ 0.5, 0.5 });
-	//shadowMap1D->setPosition({ 300, 0 });
-	//shadowMap1D->visit(renderer, transform, flags);
 }
 
 void DynamicLight2::setPosition(const cocos2d::Point& position) {
@@ -225,6 +244,7 @@ void DynamicLight2::setLightSize(int size) {
 		initOcclusionMap();
 		initShadowMap1D();
 		initFinalShadowMap();
+		initDarkAreaMap();
 		bakedMapIsValid = false;
 	}
 }
@@ -247,6 +267,6 @@ void DynamicLight2::setShadowCaster(cocos2d::Sprite* caster) {
 	shadowCaster->retain();
 }
 
-cocos2d::Sprite* DynamicLight2::getOcclusionMapSprite() {
-	return occlusionMapSprite;
+cocos2d::Sprite* DynamicLight2::getDarkAreaMapSprite() {
+	return darkAreaMapSprite;
 }
