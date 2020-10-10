@@ -214,13 +214,13 @@ void DynamicLight2::setSoftShadows(bool shadows) {
 }
 
 void DynamicLight2::setLightSize(int size) {
-	if (this->lightSize != lightSize) {
-		if (lightSize < 0) lightSize = 0;
-		if (lightSize > 1200) {
+	if (this->lightSize != size) {
+		if (size < 0) lightSize = 0;
+		if (size > 1200) {
 			this->lightSize = 1200;
 		}
 		else {
-			this->lightSize = lightSize;
+			this->lightSize = size;
 		}
 		initOcclusionMap();
 		initShadowMap1D();
