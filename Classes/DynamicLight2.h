@@ -29,15 +29,20 @@ private:
 	cocos2d::backend::Program* shadowMapShader;
 	cocos2d::backend::Program* shadowRenderShader;
 	
+	cocos2d::RenderTexture* darkAreaMap;
+	cocos2d::Sprite* darkAreaMapSprite;
+	
 	void initOcclusionMap();
 	void initShadowMap1D();
 	void initFinalShadowMap();
+	void initDarkAreaMap();
 	
 	void updateUniforms();
 	
 	void createOcclusionMap();
 	void create1DShadowMap();
 	void createFinalShadowMap();
+	void createDarkAreaMap();
 public:
 	CREATE_FUNC(DynamicLight2);
 	
@@ -54,7 +59,7 @@ public:
 	void setColor(cocos2d::Color4B c);
 	void setShadowCaster(cocos2d::Sprite* caster);
 
-	cocos2d::Sprite* getOcclusionMapSprite();
+	cocos2d::Sprite* getDarkAreaMapSprite();
 };
 
 #endif
