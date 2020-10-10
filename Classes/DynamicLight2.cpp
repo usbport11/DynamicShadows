@@ -48,7 +48,7 @@ void DynamicLight2::initOcclusionMap() {
 	occlusionMapSprite = Sprite::createWithTexture(occlusionMap->getSprite()->getTexture());
 	occlusionMapSprite->setFlippedY(true);
 	occlusionMapSprite->setProgramState(shadowMapShaderState);//link program to sprite
-	occlusionMap->retain();
+	occlusionMapSprite->retain();
 }
 
 void DynamicLight2::initShadowMap1D() {
@@ -127,20 +127,10 @@ void DynamicLight2::create1DShadowMap() {
 }
 
 void DynamicLight2::createFinalShadowMap() {
-	//for debug draw only
-	shadowMap1DSprite->setAnchorPoint({ 0, 0 });
-	//create
+	//create final shadow map
 	cocos2d::backend::UniformLocation u_texture2 = shadowRenderShaderState->getUniformLocation("u_texture2");
 	shadowRenderShaderState->setTexture(u_texture2, 1, shadowMap1DSprite->getTexture()->getBackendTexture());
-	finalShadowMapSprite->setColor({ 255, 255, 255 });
-	finalShadowMapSprite->setAnchorPoint({ 0, 0 });
-	if (additive)
-		finalShadowMapSprite->setBlendFunc(BlendFunc::ADDITIVE);
-	else
-		finalShadowMapSprite->setBlendFunc({ backend::BlendFactor::SRC_COLOR, backend::BlendFactor::ONE });
-	finalShadowMap->begin();
-		finalShadowMapSprite->visit();
-	finalShadowMap->end();
+	finalShadowMapSprite->setBlendFunc({ backend::BlendFactor::SRC_COLOR , backend::BlendFactor::SRC_ALPHA});//switch black and white
 }
 
 bool DynamicLight2::init() {
@@ -216,6 +206,7 @@ void DynamicLight2::setPosition(const cocos2d::Point& position) {
 		return;
 	}
 	Node::setPosition(position);
+	bakedMapIsValid = false;
 }
 
 void DynamicLight2::setSoftShadows(bool shadows) {
