@@ -7,6 +7,7 @@
 class HelloWorld : public cocos2d::Scene {
 private:
 	DynamicLight2* dynLight;
+	cocos2d::Point lightPosition;
 public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
