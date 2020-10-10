@@ -9,6 +9,9 @@ private:
 	DynamicLight2* dynLight;
 	cocos2d::Point lightPosition;
 public:
+	HelloWorld();
+	~HelloWorld();
+	
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	void menuCloseCallback(cocos2d::Ref* pSender);
