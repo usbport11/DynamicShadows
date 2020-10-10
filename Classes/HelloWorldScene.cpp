@@ -13,6 +13,15 @@ static void problemLoading(const char* filename) {
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
+HelloWorld::HelloWorld() {
+	dynLight = nullptr;
+	lightPosition = { 500, 200 };
+}
+
+HelloWorld::~HelloWorld() {
+	CC_SAFE_RELEASE(dynLight);
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init() {
 	if(!Scene::init())  {
@@ -62,7 +71,9 @@ void HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::
 	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
 		lightPosition.x += 2;
 	}
-	dynLight->setPosition(lightPosition);
+	if (dynLight) {
+		dynLight->setPosition(lightPosition);
+	}
 }
 
 void HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
