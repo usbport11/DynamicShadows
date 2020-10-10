@@ -7,4 +7,28 @@ https://github.com/namkazt/DynamicLight<br>
 https://github.com/zerodarkzone/Cocos2d-x-lights<br>
 https://github.com/JochenHeizmann/dynLight<br>
 <br>
-Semi work on this stage (occulusMap is OK, shadowMap1D is OK, finalMap half work).
+It is really work.<br>
+<br>
+<ul><b>Steps</b>
+  <li>
+    Prepare shadow caster and background sprites<br>
+    <img src='Explain/step1.png' width='320'><br><br>
+  </li>
+  <li>
+    Create occlusion map<br>
+    <img src='Explain/step2.png' width='320'><br><br>
+  </li>
+  <li>
+    Create 1D shadow map (in code 16px)<br>
+    <img src='Explain/step3.png' width='320'><br><br>
+  </li>
+  <li>
+    Create final shadow map<br>
+    <img src='Explain/step4.png' width='320'><br><br>
+  </li>
+  <li>
+    Create dark area map (blending)<br>
+    <img src='Explain/step5.png' width='320'><br><br>
+  </li>
+<ul>
+<br>
