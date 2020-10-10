@@ -48,3 +48,22 @@ bool HelloWorld::init() {
 void HelloWorld::menuCloseCallback(Ref* pSender) {
 	Director::getInstance()->end();
 }
+
+void HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
+	if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
+		lightPosition.y += 2;
+	}
+	if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
+		lightPosition.y -= 2;
+	}
+	if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
+		lightPosition.x -= 2;
+	}
+	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
+		lightPosition.x += 2;
+	}
+	dynLight->setPosition(lightPosition);
+}
+
+void HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
+}
