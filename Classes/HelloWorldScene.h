@@ -8,6 +8,7 @@ class HelloWorld : public cocos2d::Scene {
 private:
 	DynamicLight2* dynLight;
 	cocos2d::Point lightPosition;
+	bool keybKeys[1024];
 public:
 	HelloWorld();
 	~HelloWorld();
