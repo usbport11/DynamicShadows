@@ -49,7 +49,11 @@ bool HelloWorld::init() {
 	dynLight->setShadowCaster(shadowCaster);
 	dynLight->setLightSize(256);
 	dynLight->setPosition(lightPosition);
-	this->addChild(dynLight, 9);
+	this->addChild(dynLight, 9);//important!
+	
+	//result area with all lights and shadows
+	auto darkArea = dynLight->getDarkAreaMapSprite();
+	this->addChild(darkArea);
 
 	//enable update function
 	this->scheduleUpdate();
