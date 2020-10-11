@@ -177,8 +177,8 @@ void DynamicLight2::setLightSize(int size) {
 
 void DynamicLight2::setShadowCaster(cocos2d::Sprite* caster) {
 	CC_SAFE_RELEASE(shadowCaster);
-
-    bakedMapIsValid = false;
+	
+	bakedMapIsValid = false;
 
 	shadowCaster = Sprite::createWithTexture(caster->getTexture());
 	shadowCaster->setAnchorPoint(caster->getAnchorPoint());
