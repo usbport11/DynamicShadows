@@ -35,19 +35,21 @@ bool HelloWorld::init() {
 	listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	auto shadowCaster = Sprite::create("resources/cat4.png");
-	shadowCaster->retain();
-	shadowCaster->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-	this->addChild(shadowCaster, 8);
+	//set backround
 	auto back = Sprite::create("resources/back.png");
 	back->retain();
 	back->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(back);
+	//set shadowcater
+	auto shadowCaster = Sprite::create("resources/cat4.png");
+	shadowCaster->retain();
+	shadowCaster->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	this->addChild(shadowCaster);
 
 	dynLight = DynamicLight2::create();
 	dynLight->retain();
 	dynLight->setShadowCaster(shadowCaster);
-	dynLight->setLightSize(256);
+	dynLight->setLightSize(512);
 	dynLight->setPosition(lightPosition);
 	this->addChild(dynLight, 9);//important!
 	
