@@ -51,7 +51,28 @@ bool HelloWorld::init() {
 	dynLight->setPosition(lightPosition);
 	this->addChild(dynLight, 9);
 
+	//enable update function
+	this->scheduleUpdate();
+	
 	return true;
+}
+
+void HelloWorld::update(float delta) {
+	if (dynLight) {
+		if (keybKeys[(int)EventKeyboard::KeyCode::KEY_UP_ARROW]) {
+			lightPosition.y += 1;
+		}
+		if (keybKeys[(int)EventKeyboard::KeyCode::KEY_DOWN_ARROW]) {
+			lightPosition.y -= 1;
+		}
+		if (keybKeys[(int)EventKeyboard::KeyCode::KEY_LEFT_ARROW]) {
+			lightPosition.x -= 1;
+		}
+		if (keybKeys[(int)EventKeyboard::KeyCode::KEY_RIGHT_ARROW]) {
+			lightPosition.x += 1;
+		}
+		dynLight->setPosition(lightPosition);
+	}
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender) {
@@ -59,22 +80,9 @@ void HelloWorld::menuCloseCallback(Ref* pSender) {
 }
 
 void HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
-	if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW) {
-		lightPosition.y += 2;
-	}
-	if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
-		lightPosition.y -= 2;
-	}
-	if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
-		lightPosition.x -= 2;
-	}
-	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
-		lightPosition.x += 2;
-	}
-	if (dynLight) {
-		dynLight->setPosition(lightPosition);
-	}
+	keybKeys[(int)keyCode] = 1;
 }
 
 void HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
+	keybKeys[(int)keyCode] = 0;
 }
