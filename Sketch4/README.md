@@ -12,7 +12,6 @@
 	//set light circle
 	auto lightCircle = Sprite::create("resources/tex0.png");
 	lightCircle->retain();
-	lightCircle->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	dynLightManager = DynamicLightManager3::create();
 	dynLightManager->retain();
