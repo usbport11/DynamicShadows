@@ -8,7 +8,7 @@ https://github.com/zerodarkzone/Cocos2d-x-lights<br>
 https://github.com/JochenHeizmann/dynLight<br>
 <br>
 It is really work.<br><br>
-Better realization in scetch 4.<br><br>
+<b>Better realization in scetch 4.</b><br><br>
 <b>Code</b>
 <pre>
   auto back = Sprite::create("resources/back.png");
