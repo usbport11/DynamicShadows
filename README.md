@@ -31,6 +31,7 @@ It is really work.<br><br>
   auto darkArea = dynLight->getDarkAreaMapSprite();
   this->addChild(darkArea);//must be on top
 </pre>
+
 <br>
 <b>Steps</b><br>
 <ul>
@@ -54,5 +55,30 @@ It is really work.<br><br>
     Create dark area map (blending)<br>
     <img src='Explain/step5.png' width='320'><br><br>
   </li>
-<ul>
+</ul>
 <br>
+
+<b>Miniman for cocos2d</b>
+<pre>
+download cocos2d-x
+download python 2.7!
+download cmake
+install python 2.7
+add python to path environment variable
+unzip cocos2d-x
+run - cmd
+python
+ctrl+c
+python /cocos2d-x/setup.py
+enter
+enter
+close cmd
+start cmd
+cocos -v
+cd c:\users\user
+cocos new Test1 -l cpp
+cd c:\users\user\Test1\proj.win32
+cmake -G "Visual Studio 16 2019" -A Win32 ..
+double click Test.sln
+rignt click on top level solution - Set startup project... - select Test1
+</pre>
